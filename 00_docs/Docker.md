@@ -1,7 +1,7 @@
 # Understanding Docker
 ## Prerequisites:
 
--   A Linux or macOS machine with administrative privileges
+-   A Linux or macOS machine with administrative privileges (on Windows may be more complicated)
 -   A basic understanding of the command line interface
 
 ## Objectives:
@@ -14,7 +14,7 @@
 
 ## Steps:
 
-1.  Start by installing Docker on your local machine. Refer to the official Docker documentation for instructions on installing Docker on your specific platform.
+1.  Start by installing Docker and Docker Compose (possibly Docker Compose V2) on your local machine. Refer to the official Docker documentation for instructions on installing Docker on your specific platform.
     
 2.  Once Docker is installed, verify that it is running correctly by running the following command:
   
@@ -94,7 +94,7 @@ This will display information about all running containers, including the contai
     
 ```
 docker stop <container ID>
-docker rm <container ID>` 
+docker rm <container ID> 
 ```
 
 Replace `<container ID>` with the ID of the container you want to stop and remove.
