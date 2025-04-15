@@ -1,0 +1,1 @@
+nc -l -p 1234 -k | while read line; do echo "Packet received: $line"; done
