@@ -78,13 +78,13 @@
     
 10.  Use the following command to run a container based on your custom image:
 
-`docker run -p 5000:5000 <image name>` 
+    `docker run -p 5000:5000 <image name>` 
 
 Replace `<image name>` with a name for your custom image. This will start a container based on your custom image and map port 5000 on the host to port 5000 in the container.
 
 11.  Use the following command to list all running containers:
 
-`docker ps` 
+    `docker ps` 
 
 This will display information about all running containers, including the container ID and the mapped ports.
 
@@ -92,25 +92,28 @@ This will display information about all running containers, including the contai
     
 13.  Use the following command to stop and remove the container:
     
-`docker stop <container ID>
+```
+docker stop <container ID>
 docker rm <container ID>` 
+```
 
 Replace `<container ID>` with the ID of the container you want to stop and remove.
 
 14.  Finally, use Docker Compose to manage multiple containers. Create a new file called `docker-compose.yml` with the following contents:
 
-`version: '3'
+```
 services:
   web:
     build: .
     ports:
-      - "5000:5000"` 
+      - "5000:5000"
+```
 
 This file defines a single service called `web` that builds an image from the current directory (`.`) and maps port 5000 on the host to port 5000 in the container.
 
 15.  Use the following command to start the service defined in the `docker-compose.yml` file:
 
-`docker-compose up` 
+`docker compose up` 
 
 This will start the container defined in the `docker-compose.yml` file and display the logs in the terminal.
 
@@ -118,7 +121,7 @@ This will start the container defined in the `docker-compose.yml` file and displ
     
 17.  Use the following command to stop and remove the containers defined in the `docker-compose.yml` file:
 
-`docker-compose down` 
+`docker compose down` 
 
 This will gracefully stop and remove the containers.
 
