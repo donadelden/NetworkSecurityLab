@@ -1,0 +1,16 @@
+
+services:
+  python-app:
+    image: python:3.9
+    container_name: python-app
+    ports:
+      - "1337:1337"
+    volumes:
+      - .:/app
+    working_dir: /app
+
+    # directly run a script
+    #command: python script/to/run.py
+    
+    # keep it running, sh into it and then run whatever script you want
+    command: ["tail", "-f", "/dev/null"]
