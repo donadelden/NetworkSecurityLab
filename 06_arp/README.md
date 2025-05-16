@@ -30,20 +30,14 @@ $ dig alice
 $ dig bob
 ```
 
-5. With this information, now run arspoof twice, once for each bash instance.
+5. With this information, now run arspoof with the -r parameter to execute it both for both hosts.
 
-In the first bash window:
 ```
-$ arpspoof -t <alice_ip> <bob_ip>
-```
-
-In the second bash window:
-```
-$ arpspoof -t <bob_ip> <alice_ip>
+$ arpspoof -r -t <bob_ip> <alice_ip>
 ```
 
-6. Now you may verify in Alice's `sh` instance that `ip neighbor` shows that Bob's IP is now associated to Eve's MAC address, meaning that the ARP spoofing was successful. In any case, reloading the page still shows the normal website, since Eve is not blocking any packets yet.
-7. Now run the `add_iptables_rule.sh` script in the `app` folder. This will add a rule to `iptables` to forward every packet with destination port 80 to the proxy
+6. Now you may verify in Alice's `sh` instance that `ip neighbor` or `arp -a` shows that Bob's IP is now associated to Eve's MAC address, meaning that the ARP spoofing was successful. In any case, reloading the page still shows the normal website, since Eve is not blocking any packets yet and forwarding is active (i.e., Eve is working as a router).
+7. Now run the `add_iptables_rule.sh` script in the `app` folder. This will add a rule to `iptables` to forward every packet with destination port 80 to the proxy.
 8. You may verify that Alice's browser will give an error when reloading the page. This is because Eve is not blocking the packets in iptables and forwarding them to the proxy. Since the proxy is not active yet, the packets are simply dropped.
 9. Now we activate the proxy in passive mode:
 
