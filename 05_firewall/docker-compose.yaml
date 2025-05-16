@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: firewall_app
+    networks:
+      - app_network
+    privileged: true
+
+networks:
+  app_network:
+    driver: bridge
