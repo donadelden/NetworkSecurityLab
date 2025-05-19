@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: firewall_app
+    ports:
+      - 8080:8080
     networks:
       - app_network
     privileged: true
