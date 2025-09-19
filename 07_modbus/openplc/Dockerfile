@@ -10,6 +10,7 @@ RUN pip3 install serial flask
 # Install OpenPLC_v3
 RUN git clone https://github.com/thiagoralves/OpenPLC_v3.git
 WORKDIR /OpenPLC_v3
+RUN git checkout d4d2a2a15120d9d3b14e0c4895164ca7bbd9a5f6
 RUN ./install.sh docker
 
 # copy PLC script and database script over
