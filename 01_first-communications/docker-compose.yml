@@ -6,13 +6,13 @@ services:
     container_name: server
     ports:
       - "1234:1234"
-    #entrypoint: sh /server/nc_server.sh
-    #entrypoint: sh
+    entrypoint: sh /server/nc_server.sh
+    #entrypoint: tail -f /dev/null
   client:
     build:
       context: ./client
     container_name: client
-    #entrypoint: sh /client/nc_client.sh
-    #entrypoint: sh
+    entrypoint: sh /client/nc_client.sh
+    #entrypoint: tail -f /dev/null
     depends_on:
       - server
