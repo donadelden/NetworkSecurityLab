@@ -20,36 +20,38 @@ The three containers are connected together with a docker bridge network called 
 
 ## How to run the demo
 
-1. Install Docker, docker-compose, then run `docker-compose up -d`
-2. Connect to Alice's Firefox instance and visit `http://bob/`. This should show the actual website served by Bob
-3. You may also connect to Alice via command line (`docker exec -it mitm_alice /bin/sh`) and see which MAC address corresponds to Bob's IP address
-4. Open 2 instances of bash on Eve's container (or, equivalently, use tmux with two splits) and run the `dig` command to discover the IPs of Alice and Bob:
+1. Install Docker, docker-compose, then run `docker-compose up -d`.
+2. Connect to Alice's Firefox instance (`http://localhost:5800`) and visit `http://bob/` inside Alice's Firefox. This should show the actual website served by Bob. 
+3. You may also connect to Alice via command line (`docker exec -it mitm_alice /bin/sh`) and see which MAC address corresponds to Bob's IP address.
+4. Open Eve's container and run the `dig` command to discover the IPs of Alice and Bob:
 
 ```
 $ dig alice
 $ dig bob
 ```
 
-5. With this information, now run arspoof with the -r parameter to execute it both for both hosts.
+This is possible since Docker is creating an internal DNS server that hooks the container name to the IP. You can otherwise send a ping. 
+
+5. With this information, now run `arspoof` with the `-r` parameter to execute it for both hosts.
 
 ```
 $ arpspoof -r -t <bob_ip> <alice_ip>
 ```
 
 6. Now you may verify in Alice's `sh` instance that `ip neighbor` or `arp -a` shows that Bob's IP is now associated to Eve's MAC address, meaning that the ARP spoofing was successful. In any case, reloading the page still shows the normal website, since Eve is not blocking any packets yet and forwarding is active (i.e., Eve is working as a router).
-7. Now run the `add_iptables_rule.sh` script in the `app` folder. This will add a rule to `iptables` to forward every packet with destination port 80 to the proxy.
+7. Now open another terminal into Eve's container and run the `add_iptables_rule.sh` script in the `app` folder. This will add a rule to `iptables` to forward every packet with destination port 80 to the proxy. (You can verify the rule has been applied with `iptables -L -n -t nat` since PREROUTING is part of the NAT table).
 8. You may verify that Alice's browser will give an error when reloading the page. This is because Eve is not blocking the packets in iptables and forwarding them to the proxy. Since the proxy is not active yet, the packets are simply dropped.
-9. Now we activate the proxy in passive mode:
+9. Now we activate the proxy in passive mode in the Eve's container:
 
 ```
 $ mitmproxy -m transparent
 ```
 
 10. Reload the browser page: the honest page will show again, but mitmproxy will show that the request passed through Eve
-11. Now shut down the proxy and activate it again, this time with the script that modifies the contents of the page:
+11. Now shut down the proxy (keys `q` and then `y`) and activate it again, this time with the script that modifies the contents of the page:
 ```
 $ mitmproxy -m transparent -s /app/proxy.py
 ```
 12. Reload the browser page: the attacker has changed the contents of the website.
-13. To shut down everything use the `del_iptables_rul.sh` script in the `app` folder to remove the iptables rule and turn off the two arpspoof instances
+13. To shut down everything use the `del_iptables_rul.sh` script in the `app` folder to remove the iptables rule and turn off arpspoof.
 
